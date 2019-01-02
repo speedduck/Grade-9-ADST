@@ -1,0 +1,99 @@
+$(function(){
+	alert(
+	"This is an animated sprite movement test.\nFunctions have been rewritten to allow better control of the animation speed.\nUse arrow keys to move the character and spacebar to change skins.");
+	var playerDiv = $('#player');
+	var playerSprites = ['bandit', 'skeleton', 'terranite', 'player-custom'];
+	var currentSprite = 0;
+	var playerX = 100;
+	var playerY = 100;
+	var standing = true;
+	var walkOffset = 0;
+	var turnOffset = 0;
+	var playerWalk = 0;
+
+	function walk(){
+		if(standing){
+			walkOffset = 0;
+			playerDiv.css({'background-position-x':-64*(walkOffset)+'px'});
+		}
+		else {
+			playerDiv.css({'background-position-x':-64*(walkOffset+1)+'px'});
+			walkOffset = (walkOffset + 1)%6;
+		}
+	}
+	
+	function turn(){
+		playerDiv.css({'background-position-y':-128*(turnOffset)+'px'});
+	}
+	
+	function movePlayer() {
+		standing = true;
+		switch(playerWalk){
+			case 32:
+				break;
+			case 37:
+				if(turnOffset==1){
+					standing = false;
+					playerX -= 3;
+					playerDiv.css({left:playerX+'px'});
+				}
+				else turnOffset = 1;
+				break;
+			case 38:
+				if(turnOffset==2){
+					standing = false;
+					playerY -= 3;
+					playerDiv.css({top:playerY+'px'});
+				}
+				else turnOffset = 2;
+				break;
+			case 39:
+				if(turnOffset==3){
+					standing = false;
+					playerX += 3;
+					playerDiv.css({left:playerX+'px'});
+				}
+				else turnOffset = 3;
+				break;
+			case 40:
+				if(turnOffset==0){
+					standing = false;
+					playerY += 3;
+					playerDiv.css({top:playerY+'px'});
+				}
+				else turnOffset = 0;
+				break;
+			console.log(event.which);
+		}
+	}
+	
+	function gameLoop(event){
+		movePlayer();
+		turn();
+		walk();
+	}
+	
+	window.onblur = function(){ playerWalk = 0; };
+
+	$('body').on('keyup', function(event) {
+		if (event.which == playerWalk) playerWalk = 0;
+	});
+
+	$('body').on('keydown', function(event) {
+		switch(event.which){
+			case 32:
+				playerDiv.removeClass('sprite-'+playerSprites[currentSprite]);
+				currentSprite = (currentSprite + 1)%4;
+				playerDiv.addClass('sprite-'+playerSprites[currentSprite]);
+				break;
+			case 37:
+			case 38:
+			case 39:
+			case 40:
+				playerWalk = event.which;
+				break;
+		}
+	});
+
+	setInterval(gameLoop, 100);
+});
