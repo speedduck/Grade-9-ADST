@@ -2,15 +2,53 @@
    <head>
       <meta charset="UTF-8"> 
       <title>Chat Test</title>
+      <link rel="stylesheet" href="/grade-9/css/bootstrap.min.css">
    </head>
 
    <body>
+      <div class="container">
+	 <div class="row">
+	    <div class="col-xs-12 col-sm-6 col-lg-4">
+	       <form id="chat_form">
+		  <input type="text" id="chat_text" name="chat_text" class="form-control" />
+	       </form>
+	    </div>
 
-      
+	    <div class="col-xs-12 col-sm-6 col-lg-4" style="height:600px; overflow-y:scroll;" >
+	       <span id="chat_message"></span>
+	    </div>
+
+	    <div class="col-xs-12 col-sm-6 col-lg-4">
+	    </div>
+	 </div>
+      </div>
+
+      <div class="modal fade" id="username_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	 <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+
+	       <div class="modal-header">
+		  <h5 class="modal-title" id="username_header">Enter Username</h5>
+	       </div>
+
+	       <div class="modal-body">
+		  <span id="username_message"></span>
+
+		  <input type="text" id="username_text" name="chat_text" />
+	       </div>
+
+	       <div class="modal-footer">
+		  <button type="button" class="btn btn-primary" id="username_modal_ok">Ok</button>
+	       </div>
+
+	    </div>
+	 </div>
+      </div>
 
    </body>
    
    <script src="/grade-9/js/jquery-3.3.1.min.js"></script>
+   <script src="/grade-9/js/bootstrap.min.js"></script>
    <script src="/grade-9/js/chat_test.js"></script>
    
 </html>
