@@ -36,6 +36,7 @@ $(function(){
 	// Listen for messages
 	socket.addEventListener('message', function (event) {
 		console.log('Message from server ', event.data);
-		$('#chat_message').append('<div class="alert alert-info" role="alert">' + event.data + '</div>')
+//		$('#chat_message').append('<div class="alert alert-info" role="alert">' + event.data + '</div>');
+		$('<div class="alert alert-info" role="alert">').text(event.data).appendTo('#chat_message');
 	});
 });
