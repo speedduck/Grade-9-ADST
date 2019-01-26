@@ -1,5 +1,5 @@
 .sprite{width:64px; height:64px;}
-.sprite-bandit{background:no-repeat url("/ADST_2018/img/monster-bandit.png")}
-.sprite-skeleton{background:no-repeat url("/ADST_2018/img/monster-skeleton.png")}
-.sprite-terranite{background:no-repeat url("/ADST_2018/img/monster-terranite.png")}
-.sprite-player-custom{background:no-repeat url("/ADST_2018/img/player-male-custom.png")}
+.sprite-bandit{background:no-repeat url("/grade-9/img/monster-bandit.png")}
+.sprite-skeleton{background:no-repeat url("/grade-9/img/monster-skeleton.png")}
+.sprite-terranite{background:no-repeat url("/grade-9/img/monster-terranite.png")}
+.sprite-player-custom{background:no-repeat url("/grade-9/img/player-male-custom.png")}
