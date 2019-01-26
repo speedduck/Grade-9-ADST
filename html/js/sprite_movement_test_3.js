@@ -1,6 +1,5 @@
 $(function(){
-	alert(
-	"This is an animated sprite movement test.\nFunctions have been rewritten to allow better control of the animation speed.\nUse arrow keys to move the character and spacebar to change skins.");
+	alert("This is an animated sprite movement test.\nFunctions have been rewritten to allow better control of the animation speed.\nUse arrow keys to move the character and spacebar to change skins.");
 	var playerDiv = $('#player');
 	var playerSprites = ['bandit', 'skeleton', 'terranite', 'player-custom'];
 	var currentSprite = 0;
