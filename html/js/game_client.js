@@ -3,7 +3,7 @@ $(function(){
 	var socket = new WebSocket('ws://sean.hulka.ca/ws');
 	var playerSprites = ['bandit', 'skeleton', 'terranite', 'player-custom'];
 	var currentSprite = 0;
-	var l = false, u = false, r = false, d = false;
+	var l = false, u = false, r = false, d = false, s = false;
 
 	function keepAlive(){
 		socket.send('k');
@@ -23,19 +23,24 @@ $(function(){
 			for(var i = 0; i < players.length; i++){
 				var player = players[i];
 				var element = $('#player' + player.i);
-				if(element.length == 0){
-					element = $('<div class="sprite sprite-bandit" id="player' + player.i + '" style="width:64px; height:64px; position:absolute;"></div>')
-					element.appendTo($('#map'));
+				if('r' in player){
+					element.remove();
 				}
-				var props = {};
-				if('y' in player){
-					props.top = player.y;
-					props['z-index'] = player.y;
+				else{
+					if(element.length == 0){
+						element = $('<div class="sprite sprite-bandit" id="player' + player.i + '" style="width:64px; height:64px; position:absolute;"></div>')
+						element.appendTo($('#map'));
+					}
+					var props = {};
+					if('y' in player){
+						props.top = player.y;
+						props['z-index'] = player.y;
+					}
+					if('x' in player) props.left = player.x;
+					if('w' in player) props['background-position-x'] = -64*(player.w)+'px';
+					if('t' in player) props['background-position-y'] = -128*(player.t)+'px';
+					element.css(props);
 				}
-				if('x' in player) props.left = player.x;
-				if('w' in player) props['background-position-x'] = -64*(player.w)+'px';
-				if('t' in player) props['background-position-y'] = -128*(player.t)+'px';
-				element.css(props);
 //				element.removeClass('sprite-'+playerSprites[currentSprite]);
 //				currentSprite = (player.cs)%playerSprites.length;
 //				element.addClass('sprite-'+playerSprites[currentSprite]);
@@ -50,6 +55,7 @@ $(function(){
 		switch(event.which){
 			case 32:
 				socket.send('rs');
+				s = false;
 				break;
 			case 37:
 				socket.send('rl');
@@ -72,9 +78,9 @@ $(function(){
 
 	$('body').on('keydown', function(event) {
 		switch(event.which){
-			case 32: // space for skin changing
-				socket.send('ps');
-				break;
+//			case 32: // space for skin changing
+//				socket.send('ps');
+//				break;
 			case 37: // left arrow for movement
 				if(!l){
 					socket.send('pl');
@@ -99,9 +105,12 @@ $(function(){
 					d = true;
 				}
 				break;
-//			case 83: // s for sitting
-//				socket.send('ps');
-//				break;
+			case 83: // s for sitting
+				if(!s){
+					socket.send('ps');
+					break;
+					s = true;
+				}
 		}
 	});
 	

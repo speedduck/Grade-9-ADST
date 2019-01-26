@@ -1,3 +1,5 @@
+#!/usr/bin/node
+//#!/usr/bin/env node
 /*$(function(){	
 	window.onblur = function(){ playerWalk = 0; };
 });*/
@@ -10,70 +12,92 @@ function movePlayers(){
 	for(var i = 0; i < players.length; i++) if(players[i]){
 		var updatedPlayer = {i:i};
 		var playerChanged = false;
-		standing = true;
-		if(players[i].l){
+		if(players[i].remove){
+			players[i] = null;
+			console.log('Player #' + i + ' removed.');
 			playerChanged = true;
-			standing = false;
-//			players[i].standing = false;
-			players[i].x -= 4;
-			updatedPlayer.x = players[i].x;
-			updatedPlayer.t = players[i].t = 1;
+			updatedPlayer.r = 1;
 		}
-		if(players[i].r){
-			playerChanged = true;
-			standing = false;
-//			players[i].standing = false;
-			players[i].x += 4;
-			updatedPlayer.x = players[i].x;
-			updatedPlayer.t = players[i].t = 3;
-		}
-		if(players[i].u){
-			playerChanged = true;
-			standing = false;
-//			players[i].standing = false;
-			players[i].y -= 4;
-			updatedPlayer.y = players[i].y;
-			updatedPlayer.t = players[i].t = 2;
-		}
-		if(players[i].d){
-			playerChanged = true;
-			standing = false;
-//			players[i].standing = false;
-			players[i].y += 4;
-			updatedPlayer.y = players[i].y;
-			updatedPlayer.t = players[i].t = 0;
-		}
-		if(!standing){
-			playerChanged = true;
-			updatedPlayer.w = players[i].w = players[i].w % 6 + 1;
-		}
-		else if(!players[i].standing){ // Player went from walking to standing
-			playerChanged = true;
-			updatedPlayer.w = players[i].w = 0;
-		}
-		players[i].standing = standing;
-		if(players[i].n){
-			players[i].n = false;
-			playerChanged = true;
-			updatedPlayer.x = players[i].x;
-			updatedPlayer.y = players[i].y;
-			updatedPlayer.w = players[i].w;
-			updatedPlayer.t = players[i].t;
-			updatedPlayer.cs = players[i].cs;
+		else{
+			still = true;
+			if(players[i].l){
+				playerChanged = true;
+				still = false;
+//				players[i].still = false;
+				players[i].x -= 4;
+				updatedPlayer.x = players[i].x;
+				updatedPlayer.t = players[i].t = 1;
+			}
+			if(players[i].r){
+				playerChanged = true;
+				still = false;
+//				players[i].still = false;
+				players[i].x += 4;
+				updatedPlayer.x = players[i].x;
+				updatedPlayer.t = players[i].t = 3;
+			}
+			if(players[i].u){
+				playerChanged = true;
+				still = false;
+//				players[i].still = false;
+				players[i].y -= 4;
+				updatedPlayer.y = players[i].y;
+				updatedPlayer.t = players[i].t = 2;
+			}
+			if(players[i].d){
+				playerChanged = true;
+				still = false;
+//				players[i].still = false;
+				players[i].y += 4;
+				updatedPlayer.y = players[i].y;
+				updatedPlayer.t = players[i].t = 0;
+			}
+			if(!still){
+				playerChanged = true;
+				updatedPlayer.w = players[i].w = players[i].w % 6 + 1;
+				players[i].sit = false;
+				players[i].sitting = false;
+			}
+			else{
+				if(!players[i].still){ // Player went from walking to still
+					playerChanged = true;
+					updatedPlayer.w = players[i].w = 0;
+				}
+				if(players[i].sit && !players[i].sitting){
+					playerChanged = true;
+					players[i].sitting = true;
+					updatedPlayer.w = players[i].w = 7;
+				}
+				else if(!players[i].sit && players[i].sitting){
+					playerChanged = true;
+					players[i].sitting = false;
+					updatedPlayer.w = players[i].w = 0;
+				}
+			}
+			players[i].still = still;
+			if(players[i].n){
+				players[i].n = false;
+				playerChanged = true;
+				updatedPlayer.x = players[i].x;
+				updatedPlayer.y = players[i].y;
+				updatedPlayer.w = players[i].w;
+				updatedPlayer.t = players[i].t;
+				updatedPlayer.cs = players[i].cs;
+			}
 		}
 		if(playerChanged) updatedPlayers.push(updatedPlayer);
 	}
 	return updatedPlayers;
 }
 
-function removeClients(){
+/*function removeClients(){
 	for(var i = 0; i < players.length; i++){
 		if(players[i] && 'remove' in players[i] && players[i].remove){
 			players[i] = null;
 			console.log('Player #' + i + ' removed.');
 		}
 	}
-}
+}*/
 
 function setupNewClient(client){
 	var playerslist = [];
@@ -86,7 +110,7 @@ function setupNewClient(client){
 }
 
 function gameLoop(event){
-	removeClients();
+//	removeClients();
 	var updatedPlayers = movePlayers();
 	if(updatedPlayers.length > 0){
 		for(var i = 0; i < players.length; i++){
@@ -110,11 +134,12 @@ wss.on('connection', function(ws) {
 						players[i] = {
 								client:ws,
 								x:(64*i), y:(64*i),
-								standing:true,
-								s:false, l:false, u:false, r:false, d:false,
+								still:true,
+								sit:false, sitting:false,
+								l:false, u:false, r:false, d:false,
 								w:0, t:0, // w is used for the walk animation and t is the rotation of the player.
 								cs:0, // cs is used to determine which sprite is being used for the player.
-								n:true
+								n:true, remove:false // n signifies that the player is new
 							};
 						ws.playerIndex = i;
 						setupNewClient(players[i].client);
@@ -126,12 +151,30 @@ wss.on('connection', function(ws) {
 			case 'p':
 				var k = message.charAt(1);
 				console.log(k);
-				if('playerIndex' in ws) players[ws.playerIndex][k] = true;
+				if('playerIndex' in ws){
+					switch(k){
+						case 's':
+							players[ws.playerIndex].sit = !players[ws.playerIndex].sit;
+							break;
+						case 'l': case 'r': case 'u': case 'd':
+							players[ws.playerIndex][k] = true;
+							break;
+					}
+				}
 				break;
 			case 'r':
 				var k = message.charAt(1);
 				console.log(k);
-				if('playerIndex' in ws) players[ws.playerIndex][k] = false;
+				if('playerIndex' in ws){
+					switch(k){
+						case 's':
+							
+							break;
+						case 'l': case 'r': case 'u': case 'd':
+							players[ws.playerIndex][k] = false;
+							break;
+					}
+				}
 				break;
 			case 'c':
 				console.log('Received from client: %s', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + ': ' + message.substr(1));
