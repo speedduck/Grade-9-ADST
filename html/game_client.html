@@ -3,11 +3,34 @@
 		<meta charset="UTF-8"> 
 		<title>Game Client</title>
 		<link href="/grade-9/css/sprites.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="/grade-9/css/bootstrap.min.css">
 	</head>
 
 	<body>
 		
 		<div id="map" style="width:100%; height:100%;"></div>
+		
+	<div class="modal fade" id="username_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h5 class="modal-title" id="username_header">Enter Username</h5>
+				</div>
+
+				<div class="modal-body">
+					<span id="username_message"></span>
+
+					<input type="text" id="username_text" name="chat_text" />
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="username_modal_ok">Ok</button>
+				</div>
+
+			</div>
+		</div>
+     </div>
 		
 	</body>
 
