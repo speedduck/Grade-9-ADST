@@ -3,7 +3,32 @@ $(function(){
 	var socket = new WebSocket('ws://sean.hulka.ca/ws');
 	var playerSprites = ['bandit', 'skeleton', 'terranite', 'player-custom'];
 	var currentSprite = 0;
+	// Create variables for when certain keys are pressed
 	var l = false, u = false, r = false, d = false, s = false;
+	var username = '';
+	
+	$('#username_modal').modal({backdrop:'static', keyboard:false});
+	
+	$('#username_modal_ok').on('click', function (event) {
+		// Create variable for client name
+		var userElement = $('#username_text');
+		var username = userElement.val();
+		if(!username){
+			$('#username_message').html('<div class="alert alert-warning" role="alert">You must enter a username and username must contain only alphanumeric characters.</div>');
+		}
+		else if(username.match("^[A-z0-9]+$")){
+			// Create websocket connection.
+//			var socket = new WebSocket('ws://sean.hulka.ca/ws');
+			$('#username_message').html('');
+			$('#username_modal').modal('hide');
+//			socket.send('');
+//			username = '';
+//			userElement.val('');
+		}
+		else{
+			$('#username_message').html('<div class="alert alert-warning" role="alert">You must enter a username and username must contain only alphanumeric characters.</div>');
+		}
+	});
 
 	function keepAlive(){
 		socket.send('k');
@@ -12,13 +37,12 @@ $(function(){
 	// Connection opened
 	socket.addEventListener('open', function (event) {
 		console.log('Connection open.');
-		socket.send('n');
 	});
 
 	// Listen for messages
 	socket.addEventListener('message', function (event) {
 		var data = JSON.parse(event.data);
-		if(data.e =='v'){
+		if(data.e == 'v'){
 			var players = data.p;
 			for(var i = 0; i < players.length; i++){
 				var player = players[i];
@@ -47,16 +71,15 @@ $(function(){
 			}
 		}
 		else if(data.e == 'c'){
-			console.log('Message from server ', event.data.m);
+			console.log('Message from server ', data.m);
+		}
+		else if(data.e == 'o'){
+			$('#map').html('<div class="alert alert-primary" role="alert">' + data.m + '</div>');
 		}
 	});
 	
 	$('body').on('keyup', function(event) {
 		switch(event.which){
-			case 32:
-				socket.send('rs');
-				s = false;
-				break;
 			case 37:
 				socket.send('rl');
 				l = false;
@@ -72,6 +95,10 @@ $(function(){
 			case 40:
 				socket.send('rd');
 				d = false;
+				break;
+			case 83:
+//				socket.send('rs');
+				s = false;
 				break;
 		}
 	});
@@ -108,11 +135,19 @@ $(function(){
 			case 83: // s for sitting
 				if(!s){
 					socket.send('ps');
-					break;
 					s = true;
 				}
+				break;
 		}
 	});
+	
+	window.onblur = function(){
+		socket.send('rl');
+		socket.send('ru');
+		socket.send('rr');
+		socket.send('rd');
+		l = u = r = d = false;
+	};
 	
 	setInterval(keepAlive, 15000);
 });

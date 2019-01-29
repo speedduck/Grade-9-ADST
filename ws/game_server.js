@@ -1,9 +1,5 @@
 #!/usr/bin/node
 //#!/usr/bin/env node
-/*$(function(){	
-	window.onblur = function(){ playerWalk = 0; };
-});*/
-
 
 var players = new Array(10);
 
@@ -23,7 +19,6 @@ function movePlayers(){
 			if(players[i].l){
 				playerChanged = true;
 				still = false;
-//				players[i].still = false;
 				players[i].x -= 4;
 				updatedPlayer.x = players[i].x;
 				updatedPlayer.t = players[i].t = 1;
@@ -31,7 +26,6 @@ function movePlayers(){
 			if(players[i].r){
 				playerChanged = true;
 				still = false;
-//				players[i].still = false;
 				players[i].x += 4;
 				updatedPlayer.x = players[i].x;
 				updatedPlayer.t = players[i].t = 3;
@@ -39,7 +33,6 @@ function movePlayers(){
 			if(players[i].u){
 				playerChanged = true;
 				still = false;
-//				players[i].still = false;
 				players[i].y -= 4;
 				updatedPlayer.y = players[i].y;
 				updatedPlayer.t = players[i].t = 2;
@@ -47,7 +40,6 @@ function movePlayers(){
 			if(players[i].d){
 				playerChanged = true;
 				still = false;
-//				players[i].still = false;
 				players[i].y += 4;
 				updatedPlayer.y = players[i].y;
 				updatedPlayer.t = players[i].t = 0;
@@ -125,29 +117,31 @@ console.log("Server started");
 var WebSocketServer = require('ws').Server
     , wss = new WebSocketServer({port: 8010});
 wss.on('connection', function(ws) {
+	for(var i = 0; i < players.length; i++){
+		if(!players[i]){
+			players[i] = {
+					client:ws,
+					x:(64*i), y:(64*i),
+					still:true,
+					sit:false, sitting:false,
+					l:false, u:false, r:false, d:false,
+					w:0, t:0, // w is used for the walk animation and t is the rotation of the player.
+					cs:0, // cs is used to determine which sprite is being used for the player.
+					n:true, remove:false // n signifies that the player is new
+				};
+			ws.playerIndex = i;
+			setupNewClient(players[i].client);
+			console.log('Player #' + i + ' has joined the server.');
+			i = 10;
+		}
+	}
+	if(!('playerIndex' in ws)){
+		ws.send(JSON.stringify({e:'o', m:'Sorry, The server is full.'}));
+		ws.close();
+	}
 	ws.on('message', function(message) {
 		console.log('Received from client: %s', message);
 		switch(message.charAt(0)){
-			case 'n':
-				for(var i = 0; i < players.length; i++){
-					if(!players[i]){
-						players[i] = {
-								client:ws,
-								x:(64*i), y:(64*i),
-								still:true,
-								sit:false, sitting:false,
-								l:false, u:false, r:false, d:false,
-								w:0, t:0, // w is used for the walk animation and t is the rotation of the player.
-								cs:0, // cs is used to determine which sprite is being used for the player.
-								n:true, remove:false // n signifies that the player is new
-							};
-						ws.playerIndex = i;
-						setupNewClient(players[i].client);
-						console.log('Player #' + i + ' has joined the server.');
-						i = 10;
-					}
-				}
-				break;
 			case 'p':
 				var k = message.charAt(1);
 				console.log(k);
@@ -167,9 +161,8 @@ wss.on('connection', function(ws) {
 				console.log(k);
 				if('playerIndex' in ws){
 					switch(k){
-						case 's':
-							
-							break;
+//						case 's':
+//							break;
 						case 'l': case 'r': case 'u': case 'd':
 							players[ws.playerIndex][k] = false;
 							break;
