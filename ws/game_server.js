@@ -81,11 +81,9 @@ function movePlayers(){
 		if(playerChanged) updatedPlayers.push(updatedPlayer);
 	}
 	while(messages.length){
-		for(var i = 0; i < players.length; i++) if(players[i]){
-			client.send({e:'c', m:messages[0]});
-		}
-		
-		messages.shift();
+		var msg = messages.shift();
+		msg.e = 'c';
+		for(var i = 0; i < players.length; i++) if(players[i]) players[i].client.send(JSON.stringify(msg));
 		
 //		if('playerIndex' in ws) wss.clients.forEach(function(client) {
 //			client.send({e:'c', m:});
@@ -184,7 +182,10 @@ wss.on('connection', function(ws) {
 			case 'c':
 				console.log('Received from client: %s', (new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + ': ' + message.substr(1)));
 //use push and shift
-				messages.push(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + ': ' + message.substr(1));
+				messages.push({
+					t:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+//					p:players[ws.playerIndex].name,
+					m:message.substr(1)});
 				break;
 		}
 //		wss.clients.forEach(function each(client) {
