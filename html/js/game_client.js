@@ -78,7 +78,7 @@ $(function(){
 		}
 		if(data.e == 'c'){
 			console.log('Message from server ' + data.m);
-			$('<div class="alert alert-info" role="alert">').text(data.m).prependTo('#chat_message');
+			$('<div class="alert alert-info" role="alert">').text(data.m).appendTo('#chat_message');
 		}
 		if(data.e == 'o'){
 			$('#map').html('<div class="alert alert-primary" role="alert">' + data.m + '</div>');
