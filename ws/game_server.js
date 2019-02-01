@@ -2,6 +2,7 @@
 //#!/usr/bin/env node
 
 var players = new Array(10);
+var messages = new Array(0);
 
 function movePlayers(){
 	var updatedPlayers = [];
@@ -78,6 +79,17 @@ function movePlayers(){
 			}
 		}
 		if(playerChanged) updatedPlayers.push(updatedPlayer);
+	}
+	while(messages.length){
+		for(var i = 0; i < players.length; i++) if(players[i]){
+			client.send({e:'c', m:messages[0]});
+		}
+		
+		messages.shift();
+		
+//		if('playerIndex' in ws) wss.clients.forEach(function(client) {
+//			client.send({e:'c', m:});
+//		});
 	}
 	return updatedPlayers;
 }
@@ -170,10 +182,9 @@ wss.on('connection', function(ws) {
 				}
 				break;
 			case 'c':
-				console.log('Received from client: %s', new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + ': ' + message.substr(1));
-				if('playerIndex' in ws) wss.clients.forEach(function each(client) {
-					client.send({e:'c', m:(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + ': ' + message.substr(1))});
-				});
+				console.log('Received from client: %s', (new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + ': ' + message.substr(1)));
+//use push and shift
+				messages.push(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + ': ' + message.substr(1));
 				break;
 		}
 //		wss.clients.forEach(function each(client) {

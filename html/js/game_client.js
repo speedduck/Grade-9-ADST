@@ -39,6 +39,12 @@ $(function(){
 		console.log('Connection open.');
 	});
 
+	$('#chat_form').on('submit', function(e) {
+		e.preventDefault();
+		socket.send('c' + username + ': ' + $('#chat_text').val());
+		$('#chat_text').val('');
+    });
+
 	// Listen for messages
 	socket.addEventListener('message', function (event) {
 		var data = JSON.parse(event.data);
@@ -70,10 +76,11 @@ $(function(){
 //				element.addClass('sprite-'+playerSprites[currentSprite]);
 			}
 		}
-		else if(data.e == 'c'){
-			console.log('Message from server ', data.m);
+		if(data.e == 'c'){
+			console.log('Message from server ' + data.m);
+			$('<div class="alert alert-info" role="alert">').text(data.m).prependTo('#chat_message');
 		}
-		else if(data.e == 'o'){
+		if(data.e == 'o'){
 			$('#map').html('<div class="alert alert-primary" role="alert">' + data.m + '</div>');
 		}
 	});
@@ -141,12 +148,24 @@ $(function(){
 		}
 	});
 	
+	function sizeChat() {
+		var h = $('body').height()-300;
+		if(h < 100) h = 100;
+		$('#chat_area').height(h);
+	}
+	
+	sizeChat();
+	
+	$(window).resize(function(){ sizeChat(); });
+	
 	window.onblur = function(){
-		socket.send('rl');
-		socket.send('ru');
-		socket.send('rr');
-		socket.send('rd');
-		l = u = r = d = false;
+		if(socket.readystate == socket.OPEN){
+			socket.send('rl');
+			socket.send('ru');
+			socket.send('rr');
+			socket.send('rd');
+			l = u = r = d = false;
+		}
 	};
 	
 	setInterval(keepAlive, 15000);
