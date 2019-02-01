@@ -137,7 +137,8 @@ wss.on('connection', function(ws) {
 					l:false, u:false, r:false, d:false,
 					w:0, t:0, // w is used for the walk animation and t is the rotation of the player.
 					cs:0, // cs is used to determine which sprite is being used for the player.
-					n:true, remove:false // n signifies that the player is new
+					n:true, remove:false, // n signifies that the player is new
+					name:i // p is the player name
 				};
 			ws.playerIndex = i;
 			setupNewClient(players[i].client);
@@ -184,8 +185,12 @@ wss.on('connection', function(ws) {
 //use push and shift
 				messages.push({
 					t:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-//					p:players[ws.playerIndex].name,
+					p:players[ws.playerIndex].name,
 					m:message.substr(1)});
+				break;
+			case 'u':
+				console.log('Player #' + ws.playerIndex + ' has claimed the username ' + message.substr(1));
+				players[ws.playerIndex].name = message.substr(1);
 				break;
 		}
 //		wss.clients.forEach(function each(client) {
