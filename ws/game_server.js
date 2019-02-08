@@ -6,7 +6,7 @@ var messages = new Array(0);
 var dateTime = require('node-datetime');
 var fs = require('fs')
 
-function movePlayers(){
+function processPlayers(){
 	var updatedPlayers = [];
 	for(var i = 0; i < players.length; i++) if(players[i]){
 		var updatedPlayer = {i:i};
@@ -117,7 +117,7 @@ function setupNewClient(client){
 
 function gameLoop(event){
 //	removeClients();
-	var updatedPlayers = movePlayers();
+	var updatedPlayers = processPlayers();
 	if(updatedPlayers.length > 0){
 		for(var i = 0; i < players.length; i++){
 			if(players[i]){
@@ -151,10 +151,10 @@ wss.on('connection', function(ws) {
 		}
 	}
 	if(!('playerIndex' in ws)){
-		ws.send(JSON.stringify({e:'o', m:'Sorry, The server is full.'}));
+		ws.send(JSON.stringify({e:'e', m:'Sorry, The server is full.'}));
 		ws.close();
 	}
-	ws.on('message', function(message) {
+	else ws.on('message', function(message) {
 		console.log('Received from client: %s', message);
 		switch(message.charAt(0)){
 			case 'p':
@@ -185,18 +185,34 @@ wss.on('connection', function(ws) {
 				}
 				break;
 			case 'c':
-				var date = dateTime.create();
-				var currentDate = date.format('H:M:S');
-				console.log('Received from client: %s', currentDate + ': ' + message.substr(1));
-//use push and shift
-				messages.push({
-					t:currentDate,
-					p:players[ws.playerIndex].name,
-					m:message.substr(1)});
+				var m = message.substr(1).trim();
+				if(m){
+					var date = dateTime.create();
+					var currentDate = date.format('H:M:S');
+					console.log('Received from client: %s', currentDate + ': ' + message.substr(1));
+// use push and shift
+					messages.push({
+						t:currentDate,
+						p:players[ws.playerIndex].name,
+						m:message.substr(1)});
+				}
 				break;
 			case 'u':
-				console.log('Player #' + ws.playerIndex + ' has claimed the username ' + message.substr(1));
-				players[ws.playerIndex].name = message.substr(1);
+				var username = message.substr(1);
+				var ok = true;
+				var errMsg;
+				if(ok && (!username || !username.match('^[A-z0-9]+$'))){
+					ok = false;
+					errMsg = 'You must enter a username and username must contain only alphanumeric characters.';
+				}
+				if(ok){
+					console.log('Player #' + ws.playerIndex + ' has claimed the username ' + username);
+					players[ws.playerIndex].name = username;
+				}
+				else{
+					ws.send(JSON.stringify({e:'e', m:errMsg}));
+					ws.close();
+				}
 				break;
 		}
 //		wss.clients.forEach(function each(client) {
