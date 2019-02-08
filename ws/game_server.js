@@ -3,6 +3,8 @@
 
 var players = new Array(10);
 var messages = new Array(0);
+var dateTime = require('node-datetime');
+var fs = require('fs')
 
 function movePlayers(){
 	var updatedPlayers = [];
@@ -84,7 +86,9 @@ function movePlayers(){
 		var msg = messages.shift();
 		msg.e = 'c';
 		for(var i = 0; i < players.length; i++) if(players[i]) players[i].client.send(JSON.stringify(msg));
-		
+		var date = dateTime.create();
+		var currentDate = date.format('Y-m-d');
+		fs.appendFile(('chatlogs/' + currentDate + '.log'), ('[' + msg.t + '] ' + msg.p + ': ' + msg.m + '\n'), function(err){});
 //		if('playerIndex' in ws) wss.clients.forEach(function(client) {
 //			client.send({e:'c', m:});
 //		});
@@ -181,10 +185,12 @@ wss.on('connection', function(ws) {
 				}
 				break;
 			case 'c':
-				console.log('Received from client: %s', (new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + ': ' + message.substr(1)));
+				var date = dateTime.create();
+				var currentDate = date.format('H:M:S');
+				console.log('Received from client: %s', currentDate + ': ' + message.substr(1));
 //use push and shift
 				messages.push({
-					t:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+					t:currentDate,
 					p:players[ws.playerIndex].name,
 					m:message.substr(1)});
 				break;
