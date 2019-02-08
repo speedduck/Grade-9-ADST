@@ -86,7 +86,7 @@ $(function(){
 					.appendTo(cmsg);
 //				chatElement.text('[' + data.t + '] ' + data.p + ': ' + data.m).appendTo(cmsg);
 				break;
-			case 'o':
+			case 'e':
 				$('#map').html('<div class="alert alert-primary" role="alert">' + data.m + '</div>');
 				break;
 		}
