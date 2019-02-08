@@ -6,6 +6,7 @@ $(function(){
 	// Create variables for when certain keys are pressed
 	var l = false, u = false, r = false, d = false, s = false;
 	var username;
+	var cmsg = $('#chat_message');
 
 	$('#username_modal').modal({backdrop:'static', keyboard:false});
 
@@ -78,7 +79,12 @@ $(function(){
 				break;
 			case 'c':
 				console.log('Message from server ' + data.m);
-				$('<div class="alert alert-info" role="alert">').text('[' + data.t + '] ' + data.p + ': ' + data.m).appendTo('#chat_message');
+				$('<div class="alert alert-info" role="alert">')
+					.append($('<span>').text('[' + data.t + '] '))
+					.append($('<span style="font-weight:bold;">').text(data.p + ': '))
+					.append($('<span>').text(data.m))
+					.appendTo(cmsg);
+//				chatElement.text('[' + data.t + '] ' + data.p + ': ' + data.m).appendTo(cmsg);
 				break;
 			case 'o':
 				$('#map').html('<div class="alert alert-primary" role="alert">' + data.m + '</div>');
