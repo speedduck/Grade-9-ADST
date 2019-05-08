@@ -2,9 +2,9 @@
 	<head>
 		<meta charset="UTF-8"> 
 		<title>Game Client</title>
+		<link rel="stylesheet" href="/grade-9/css/bootstrap.min.css">
 		<link href="/grade-9/css/sprites.css" rel="stylesheet" type="text/css">
 		<link href="/grade-9/css/custom.css" rel="stylesheet" type="text/css">
-		<link rel="stylesheet" href="/grade-9/css/bootstrap.min.css">
 	</head>
 
 	<body>
@@ -17,8 +17,13 @@
 
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
-						<button class="btn btn-info navbar-btn" data-toggle="modal" data-target="#chat_modal">Chat</button>
-<!--					<li class="nav-item active">
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="modal" data-target="#chat_modal">Chat</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link">Game Controls</a>
+					</li>
+<!--				<li class="nav-item active">
 						<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
@@ -37,9 +42,9 @@
 					</li>
 					<li class="nav-item">
 						<a class="nav-link disabled" href="#">Disabled</a>
-					</li>
+					</li>-->
 				</ul>
-				<form class="form-inline my-2 my-lg-0">
+<!--			<form class="form-inline my-2 my-lg-0">
 					<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
 					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 				</form>-->
@@ -76,7 +81,18 @@
 			</div>
 		 </div>
 
-		<div id="map"></div>
+		<div id="map-wrapper">
+			<div id="map">
+				<button type="button" class="btn btn-primary mv-btn mv-btn-left mv-btn-vcenter" data-direction='["l"]'>←</button>
+				<button type="button" class="btn btn-primary mv-btn mv-btn-top mv-btn-hcenter" data-direction='["u"]'>↑</button>
+				<button type="button" class="btn btn-primary mv-btn mv-btn-right mv-btn-vcenter" data-direction='["r"]'>→</button>
+				<button type="button" class="btn btn-primary mv-btn mv-btn-bottom mv-btn-hcenter" data-direction='["d"]'>↓</button>
+				<button type="button" class="btn btn-primary mv-btn mv-btn-left mv-btn-top" data-direction='["l","u"]'>↖</button>
+				<button type="button" class="btn btn-primary mv-btn mv-btn-right mv-btn-top" data-direction='["r","u"]'>↗</button>
+				<button type="button" class="btn btn-primary mv-btn mv-btn-right mv-btn-bottom" data-direction='["r","d"]'>↘</button>
+				<button type="button" class="btn btn-primary mv-btn mv-btn-left mv-btn-bottom" data-direction='["l","d"]'>↙</button>
+			</div>
+		</div>
 
 		<div class="modal fade" id="username_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">

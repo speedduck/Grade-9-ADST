@@ -4,7 +4,8 @@ $(function(){
 	var playerSprites = ['bandit', 'skeleton', 'terranite', 'player-custom'];
 	var currentSprite = 0;
 	// Create variables for when certain keys are pressed
-	var l = false, u = false, r = false, d = false, s = false;
+	var moving = {l:false, u:false, r:false, d:false};
+	var s = false;
 	var username;
 	var cmsg = $('#chat_message');
 
@@ -100,24 +101,27 @@ $(function(){
 		}
     });
 
+	function move(direction, press){
+		if(!press || !moving[direction]) {
+			moving[direction] = press;
+			socket.send((press?'p':'r') + direction);
+		}
+	}
+
 	$('body').on('keyup', function(event) {
 		if(socket){
 			switch(event.which){
 				case 37:
-					socket.send('rl');
-					l = false;
+					move('l', false);
 					break;
 				case 38:
-					socket.send('ru');
-					u = false;
+					move('u', false);
 					break;
 				case 39:
-					socket.send('rr');
-					r = false;
+					move('r', false);
 					break;
 				case 40:
-					socket.send('rd');
-					d = false;
+					move('d', false);
 					break;
 				case 83:
 //					socket.send('rs');
@@ -134,28 +138,16 @@ $(function(){
 //					socket.send('ps');
 //					break;
 				case 37: // left arrow for movement
-					if(!l){
-						socket.send('pl');
-						l = true;
-					}
+					move('l', true);
 					break;
 				case 38: // up arrow for movement
-					if(!u){
-						socket.send('pu');
-						u = true;
-					}
+					move('u', true);
 					break;
 				case 39: // right arrow for movement
-					if(!r){
-						socket.send('pr');
-						r = true;
-					}
+					move('r', true);
 					break;
 				case 40: // down arrow for movement
-					if(!d){
-						socket.send('pd');
-						d = true;
-					}
+					move('d', true);
 					break;
 				case 83: // s for sitting
 					if(!s){
@@ -166,6 +158,28 @@ $(function(){
 			}
 		}
 	});
+
+	$('body').on('click', '.mv-btn', function(event) {
+		if(socket){
+			var el = $(this);
+			var directions = el.data('direction');
+			if (el.hasClass('btn-secondary')){
+				for(var i = 0; i < directions.length; i++){
+					move(directions[i], false);
+				}
+				el.removeClass('btn-secondary');
+				el.addClass('btn-primary');
+			}
+			else{
+				var nm = {u:false, d:false, r:false, l:false};
+				for(var i = 0; i < directions.length; i++) nm[directions[i]] = true;
+				for(var direction in moving) if(nm[direction] != moving[direction]) move(direction, nm[direction]);
+				$('.mv-btn').removeClass('btn-secondary').addClass('btn-primary');
+				el.removeClass('btn-primary');
+				el.addClass('btn-secondary');
+			}
+		}
+	})
 
 	function sizeChat() {
 		var h = $('body').height()-300;
