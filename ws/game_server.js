@@ -48,6 +48,7 @@ function processPlayers(){
 				updatedPlayer.t = players[i].t = 0;
 			}
 			if(!still){
+				// Player is moving, advance animation frame. Stand up if sitting.
 				playerChanged = true;
 				updatedPlayer.w = players[i].w = players[i].w % 6 + 1;
 				players[i].sit = false;
@@ -58,19 +59,26 @@ function processPlayers(){
 					playerChanged = true;
 					updatedPlayer.w = players[i].w = 0;
 				}
-				if(players[i].sit && !players[i].sitting){
+				if(players[i].sit != players[i].sitting){ // Toggle sit/stand state
+					playerChanged=true;
+					players[i].sitting=players[i].sit;
+					updatedPlayer.w = players[i].w = (players[i].sit ? 7 : 0);
+				}
+/*
+				if(players[i].sit && !players[i].sitting){ // Player sits
 					playerChanged = true;
 					players[i].sitting = true;
 					updatedPlayer.w = players[i].w = 7;
 				}
-				else if(!players[i].sit && players[i].sitting){
+				else if(!players[i].sit && players[i].sitting){ // Player stands
 					playerChanged = true;
 					players[i].sitting = false;
 					updatedPlayer.w = players[i].w = 0;
 				}
+*/
 			}
 			players[i].still = still;
-			if(players[i].n){
+			if(players[i].n){ // Tell everyone about the new guy
 				players[i].n = false;
 				playerChanged = true;
 				updatedPlayer.x = players[i].x;
@@ -108,11 +116,9 @@ function processPlayers(){
 function setupNewClient(client){
 	var playerslist = [];
 	for(var i = 0; i < players.length; i++){
-		if(players[i]){
-			playerslist.push({i:i, x:players[i].x, y:players[i].y, w:players[i].w, t:players[i].t, cs:players[i].cs})
-		}
+		if(players[i]) playerslist.push({i:i, x:players[i].x, y:players[i].y, w:players[i].w, t:players[i].t, cs:players[i].cs});
 	}
-	client.send(JSON.stringify({e:'v', p:playerslist}));
+	client.send(JSON.stringify({e:'i', p:playerslist, i:client.playerIndex}));
 }
 
 function gameLoop(event){
@@ -142,7 +148,7 @@ wss.on('connection', function(ws) {
 					w:0, t:0, // w is used for the walk animation and t is the rotation of the player.
 					cs:0, // cs is used to determine which sprite is being used for the player.
 					n:true, remove:false, // n signifies that the player is new
-					name:i // p is the player name
+					name:i // name is the player name
 				};
 			ws.playerIndex = i;
 			setupNewClient(players[i].client);

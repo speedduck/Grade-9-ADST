@@ -1,6 +1,12 @@
 $(function(){
 	alert("This is the game client.\nUp to 10 players may join and move around on the map.\nUse arrow keys to move the character, spacebar to change skins, and chat to communicate with other players.");
 	var socket;
+	var playerIndex = -1;
+	var playerX, playerY, mapOffsetX, mapOffsetY, mySprite, myWidth, myHeight;
+	var mapWrapper = $('#map-wrapper');
+	var viewport = $('#viewport');
+	var viewportWidth = viewport.width();
+	var viewportHeight = viewport.height();
 	var playerSprites = ['bandit', 'skeleton', 'terranite', 'player-custom'];
 	var currentSprite = 0;
 	// Create variables for when certain keys are pressed
@@ -50,7 +56,11 @@ $(function(){
 	function onMessage(event) {
 		var data = JSON.parse(event.data);
 		switch(data.e){
+			case 'i':
+				// Player init
+				playerIndex = data.i;
 			case 'v':
+				// View update
 				var players = data.p;
 				for(var i = 0; i < players.length; i++){
 					var player = players[i];
@@ -73,12 +83,31 @@ $(function(){
 						if('t' in player) props['background-position-y'] = -128*(player.t)+'px';
 						element.css(props);
 					}
+					if(player.i == playerIndex){
+						// This is me
+						if(!mySprite){
+							mySprite = $('#player' + playerIndex);
+							myWidth = mySprite.width();
+							myHeight = mySprite.height();
+						}
+						var moved = false;
+						if('x' in player){
+							playerX = player.x;
+							moved = true;
+						}
+						if('y' in player){
+							playerY = player.y;
+							moved = true;
+						}
+						if(moved) centerPlayer();
+					}
 //					element.removeClass('sprite-'+playerSprites[currentSprite]);
 //					currentSprite = (player.cs)%playerSprites.length;
 //					element.addClass('sprite-'+playerSprites[currentSprite]);
 				}
 				break;
 			case 'c':
+				// Chat message
 				console.log('Message from server ' + data.m);
 				$('<div class="alert alert-info" role="alert">')
 					.append($('<span>').text('[' + data.t + '] '))
@@ -88,8 +117,22 @@ $(function(){
 //				chatElement.text('[' + data.t + '] ' + data.p + ': ' + data.m).appendTo(cmsg);
 				break;
 			case 'e':
+				// Error
 				$('#map').html('<div class="alert alert-primary" role="alert">' + data.m + '</div>');
 				break;
+		}
+	}
+
+	function centerPlayer(){
+		mapOffsetY = viewportHeight/2 - playerY - myHeight/2;
+		mapOffsetX = viewportWidth/2 - playerX - myWidth/2;
+		mapWrapper.css({top:mapOffsetY+'px', left:mapOffsetX+'px'});
+	}
+
+	function move(direction, press){
+		if(!press || !moving[direction]) {
+			moving[direction] = press;
+			socket.send((press?'p':'r') + direction);
 		}
 	}
 
@@ -100,13 +143,6 @@ $(function(){
 			$('#chat_text').val('');
 		}
     });
-
-	function move(direction, press){
-		if(!press || !moving[direction]) {
-			moving[direction] = press;
-			socket.send((press?'p':'r') + direction);
-		}
-	}
 
 	$('body').on('keyup', function(event) {
 		if(socket){
@@ -189,7 +225,12 @@ $(function(){
 
 	sizeChat();
 
-	$(window).resize(function(){ sizeChat(); });
+	$(window).resize(function(){
+		viewportWidth = viewport.width();
+		viewportHeight = viewport.height();
+		sizeChat();
+		centerPlayer();
+	});
 
 	window.onblur = function(){
 		if(socket && socket.readystate == socket.OPEN){
