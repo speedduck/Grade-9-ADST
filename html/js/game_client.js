@@ -70,7 +70,7 @@ $(function(){
 					}
 					else{
 						if(element.length == 0){
-							element = $('<div class="sprite sprite-bandit" id="player' + player.i + '" style="width:64px; height:64px; position:absolute;"></div>')
+							element = $('<div class="sprite sprite-bandit" id="player' + player.i + '" style="width:' + player.pw + 'px; height:' + player.ph + 'px; position:absolute;"></div>');
 							element.appendTo($('#map'));
 						}
 						var props = {};
@@ -81,6 +81,8 @@ $(function(){
 						if('x' in player) props.left = player.x;
 						if('w' in player) props['background-position-x'] = -64*(player.w)+'px';
 						if('t' in player) props['background-position-y'] = -128*(player.t)+'px';
+						if('pw' in player) props['width'] = player.pw + 'px';
+						if('ph' in player) props['height'] = player.ph + 'px';
 						element.css(props);
 					}
 					if(player.i == playerIndex){
@@ -106,6 +108,23 @@ $(function(){
 //					element.addClass('sprite-'+playerSprites[currentSprite]);
 				}
 				break;
+			case 'm':
+				// Map update
+				var mapInfo = data.p;
+				var tileInfo = data.t;
+				var mapString = mapInfo.m;
+				var mapWidth = mapInfo.w;
+				var mapHeight = mapInfo.h;
+				var tileSet = tileInfo.i;
+				var tileWidth = tileInfo.w;
+				var tileHeight = tileInfo.h;
+				mapWrapper.css({width:mapWidth*tileWidth + 'px', height:mapHeight*tileHeight + 'px'});
+				for(var i = 0; i < mapString.length; i++){
+					var offset = -tileWidth * (mapString.charCodeAt(i)-tileWidth);
+					var tile = $('<div class="tile" id="tile' + i + '" style="width:' + tileWidth + 'px; height:' + tileHeight + 'px; background:no-repeat url(/grade-9/img/' + tileSet + '.png); background-position-x:' + offset + 'px"></div>');
+					tile.appendTo($('#map'));
+				}
+				break;
 			case 'c':
 				// Chat message
 				console.log('Message from server ' + data.m);
@@ -126,7 +145,7 @@ $(function(){
 	function centerPlayer(){
 		mapOffsetY = viewportHeight/2 - playerY - myHeight/2;
 		mapOffsetX = viewportWidth/2 - playerX - myWidth/2;
-		mapWrapper.css({top:mapOffsetY+'px', left:mapOffsetX+'px'});
+		mapWrapper.css({top:mapOffsetY + 'px', left:mapOffsetX + 'px'});
 	}
 
 	function move(direction, press){

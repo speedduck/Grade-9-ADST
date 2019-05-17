@@ -3,6 +3,153 @@
 
 var players = new Array(10);
 var messages = new Array(0);
+
+// Grass tiles
+var g1 = {tileOffset:0, block:false};
+var g2 = {tileOffset:1, block:false};
+var g3 = {tileOffset:2, block:false};
+var g4 = {tileOffset:3, block:false};
+// Grass in bright grass tiles
+var g5 = {tileOffset:14, block:false};
+var g6 = {tileOffset:15, block:false};
+var g7 = {tileOffset:16, block:false};
+var g8 = {tileOffset:17, block:false};
+// Bright grass inner tile
+var bg = {tileOffset:9, block:false};
+// Bright grass corner tiles
+var bg1 = {tileOffset:5, block:false};
+var bg2 = {tileOffset:7, block:false};
+var bg3 = {tileOffset:11, block:false};
+var bg4 = {tileOffset:13, block:false};
+// Bright grass edge tiles
+var bg5 = {tileOffset:6, block:false};
+var bg6 = {tileOffset:8, block:false};
+var bg7 = {tileOffset:10, block:false};
+var bg8 = {tileOffset:12, block:false};
+// Water corner tiles
+var wc1 = {tileOffset:18, block:true};
+var wc2 = {tileOffset:20, block:true};
+var wc3 = {tileOffset:24, block:true};
+var wc4 = {tileOffset:26, block:true};
+// Water edge tiles
+var we1 = {tileOffset:19, block:true};
+var we2 = {tileOffset:21, block:true};
+var we3 = {tileOffset:23, block:true};
+var we4 = {tileOffset:25, block:true};
+// Water tile
+var w = {tileOffset:22, block:true};
+// Map specifications
+var mapWidth = 100; // In tiles
+var mapHeight = 100; // In tiles
+var edgeOffsetX = 19; // In tiles
+var edgeOffsetY = 18; // In tiles
+var tileSet = 'woodland_tileset';
+var tileWidth = 32; // In pixels
+var tileHeight = 32; // Again, in pixels
+var spawnPoint = {x:22, y:20};
+var map = [
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,wc3,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,wc4,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,bg1,bg5,bg5,bg2,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,bg6,g5 ,g6 ,bg7,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,bg6,bg7,bg6,bg7,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,bg6,g7 ,g8 ,bg7,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,bg3,bg8,bg8,bg4,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,wc1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,wc2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w
+];
+
 var dateTime = require('node-datetime');
 var fs = require('fs')
 
@@ -20,32 +167,64 @@ function processPlayers(){
 		else{
 			still = true;
 			if(players[i].l){
-				playerChanged = true;
-				still = false;
-				players[i].x -= 4;
-				updatedPlayer.x = players[i].x;
-				updatedPlayer.t = players[i].t = 1;
+				if(players[i].x < (edgeOffsetX*32 + 5)){
+					if(players[i].t != 1){
+						playerChanged = true;
+						updatedPlayer.t = players[i].t = 1;
+					}
+				}
+				else{
+					playerChanged = true;
+					still = false;
+					players[i].x -= 4;
+					updatedPlayer.x = players[i].x;
+					updatedPlayer.t = players[i].t = 1;
+				}
 			}
 			if(players[i].r){
-				playerChanged = true;
-				still = false;
-				players[i].x += 4;
-				updatedPlayer.x = players[i].x;
-				updatedPlayer.t = players[i].t = 3;
+				if((players[i].x + players[i].pw) > ((mapWidth-edgeOffsetX) * 32 - 5)){
+					if(players[i].t != 3){
+						playerChanged = true;
+						updatedPlayer.t = players[i].t = 3;
+					}
+				}
+				else{
+					playerChanged = true;
+					still = false;
+					players[i].x += 4;
+					updatedPlayer.x = players[i].x;
+					updatedPlayer.t = players[i].t = 3;
+				}
 			}
 			if(players[i].u){
-				playerChanged = true;
-				still = false;
-				players[i].y -= 4;
-				updatedPlayer.y = players[i].y;
-				updatedPlayer.t = players[i].t = 2;
+				if((players[i].y + players[i].ph/2) < (edgeOffsetY*32 + 5)){
+					if(players[i].t != 2){
+						playerChanged = true;
+						updatedPlayer.t = players[i].t = 2;
+					}
+				}
+				else{
+					playerChanged = true;
+					still = false;
+					players[i].y -= 4;
+					updatedPlayer.y = players[i].y;
+					updatedPlayer.t = players[i].t = 2;
+				}
 			}
 			if(players[i].d){
-				playerChanged = true;
-				still = false;
-				players[i].y += 4;
-				updatedPlayer.y = players[i].y;
-				updatedPlayer.t = players[i].t = 0;
+				if((players[i].y + players[i].ph) > ((mapHeight-edgeOffsetY) * 32 - 5)){
+					if(players[i].t != 0){
+						playerChanged = true;
+						updatedPlayer.t = players[i].t = 0;
+					}
+				}
+				else{
+					playerChanged = true;
+					still = false;
+					players[i].y += 4;
+					updatedPlayer.y = players[i].y;
+					updatedPlayer.t = players[i].t = 0;
+				}
 			}
 			if(!still){
 				// Player is moving, advance animation frame. Stand up if sitting.
@@ -86,6 +265,8 @@ function processPlayers(){
 				updatedPlayer.w = players[i].w;
 				updatedPlayer.t = players[i].t;
 				updatedPlayer.cs = players[i].cs;
+				updatedPlayer.pw = players[i].pw;
+				updatedPlayer.ph = players[i].ph;
 			}
 		}
 		if(playerChanged) updatedPlayers.push(updatedPlayer);
@@ -116,9 +297,12 @@ function processPlayers(){
 function setupNewClient(client){
 	var playerslist = [];
 	for(var i = 0; i < players.length; i++){
-		if(players[i]) playerslist.push({i:i, x:players[i].x, y:players[i].y, w:players[i].w, t:players[i].t, cs:players[i].cs});
+		if(players[i]) playerslist.push({i:i, x:players[i].x, y:players[i].y, w:players[i].w, t:players[i].t, cs:players[i].cs, pw:players[i].pw, ph:players[i].ph});
 	}
 	client.send(JSON.stringify({e:'i', p:playerslist, i:client.playerIndex}));
+	var mapString = '';
+	for(var i = 0; i < map.length; i++) mapString += String.fromCharCode(map[i].tileOffset + 32);
+	client.send(JSON.stringify({e:'m', p:{m:mapString, w:mapWidth, h:mapHeight}, t:{i:tileSet, w:tileWidth, h:tileHeight}}));
 }
 
 function gameLoop(event){
@@ -141,9 +325,10 @@ wss.on('connection', function(ws) {
 		if(!players[i]){
 			players[i] = {
 					client:ws,
-					x:(64*i), y:(64*i),
+					x:(tileWidth*spawnPoint['x']), y:(tileHeight*spawnPoint['y']),
 					still:true,
 					sit:false, sitting:false,
+					pw:64, ph:64, // Player width and height in pixels
 					l:false, u:false, r:false, d:false,
 					w:0, t:0, // w is used for the walk animation and t is the rotation of the player.
 					cs:0, // cs is used to determine which sprite is being used for the player.
