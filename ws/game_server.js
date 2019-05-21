@@ -9,11 +9,12 @@ var g1 = {tileOffset:0, block:false};
 var g2 = {tileOffset:1, block:false};
 var g3 = {tileOffset:2, block:false};
 var g4 = {tileOffset:3, block:false};
+var g5 = {tileOffset:4, block:false};
 // Grass in bright grass tiles
-var g5 = {tileOffset:14, block:false};
-var g6 = {tileOffset:15, block:false};
-var g7 = {tileOffset:16, block:false};
-var g8 = {tileOffset:17, block:false};
+var g6 = {tileOffset:14, block:false};
+var g7 = {tileOffset:15, block:false};
+var g8 = {tileOffset:16, block:false};
+var g9 = {tileOffset:17, block:false};
 // Bright grass inner tile
 var bg = {tileOffset:9, block:false};
 // Bright grass corner tiles
@@ -67,19 +68,19 @@ w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
 w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
 w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
 w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,wc3,we4,we4,we4,we4,we4,we4,we4,we4,we4,we4,wc4,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,bg1,bg5,bg5,bg2,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,bg6,g5 ,g6 ,bg7,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,bg6,bg7,bg6,bg7,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,bg6,g7 ,g8 ,bg7,g1 ,g2 ,g3 ,g4 ,g1 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,bg3,bg8,bg8,bg4,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g3 ,g4 ,g1 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g2 ,g3 ,g3 ,g4 ,g1 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
-w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,g1 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,bg1,bg5,bg5,bg2,g2 ,g3 ,g4 ,g5 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,bg6,g6 ,g7 ,bg7,g3 ,g4 ,g5 ,g4 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,bg6,bg7,bg6,bg7,g4 ,g5 ,g4 ,g3 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,bg6,g8 ,g9 ,bg7,g5 ,g4 ,g3 ,g2 ,g1 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,bg3,bg8,bg8,bg4,g3 ,g4 ,g5 ,g4 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g5 ,g2 ,g3 ,g4 ,g3 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g3 ,g2 ,g1 ,g2 ,g3 ,g4 ,g5 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g4 ,g5 ,g3 ,g2 ,g1 ,g2 ,g2 ,g3 ,g4 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g4 ,g4 ,g5 ,g3 ,g4 ,g1 ,g3 ,g4 ,g5 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g3 ,g2 ,g3 ,g5 ,g1 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g1 ,g2 ,g3 ,g4 ,g5 ,g4 ,g3 ,g4 ,g2 ,g3 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g2 ,g3 ,g4 ,g3 ,g4 ,g5 ,g4 ,g3 ,g2 ,g1 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
+w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,we3,g3 ,g2 ,g1 ,g2 ,g3 ,g4 ,g5 ,g4 ,g3 ,g2 ,we2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
 w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,wc1,we1,we1,we1,we1,we1,we1,we1,we1,we1,we1,wc2,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
 w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
 w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,w  ,
@@ -178,6 +179,7 @@ function processPlayers(){
 				updatedPlayer.w = players[i].w = players[i].w % 6 + 1;
 				players[i].sit = false;
 				players[i].sitting = false;
+				updatedPlayer.sit = players[i].sit;
 			}
 			else{
 				if(!players[i].still){ // Player went from walking to still
@@ -185,9 +187,10 @@ function processPlayers(){
 					updatedPlayer.w = players[i].w = 0;
 				}
 				if(players[i].sit != players[i].sitting){ // Toggle sit/stand state
-					playerChanged=true;
-					players[i].sitting=players[i].sit;
+					playerChanged = true;
+					players[i].sitting = players[i].sit;
 					updatedPlayer.w = players[i].w = (players[i].sit ? 7 : 0);
+					updatedPlayer.sit = players[i].sit;
 				}
 /*
 				if(players[i].sit && !players[i].sitting){ // Player sits
@@ -213,6 +216,7 @@ function processPlayers(){
 				updatedPlayer.cs = players[i].cs;
 				updatedPlayer.pw = players[i].pw;
 				updatedPlayer.ph = players[i].ph;
+				updatedPlayer.sit = players[i].sit;
 			}
 		}
 		if(playerChanged) updatedPlayers.push(updatedPlayer);
@@ -243,7 +247,7 @@ function processPlayers(){
 function setupNewClient(client){
 	var playerslist = [];
 	for(var i = 0; i < players.length; i++){
-		if(players[i]) playerslist.push({i:i, x:players[i].x, y:players[i].y, w:players[i].w, t:players[i].t, cs:players[i].cs, pw:players[i].pw, ph:players[i].ph});
+		if(players[i]) playerslist.push({i:i, x:players[i].x, y:players[i].y, w:players[i].w, t:players[i].t, cs:players[i].cs, pw:players[i].pw, ph:players[i].ph, sit:players[i].sit});
 	}
 	client.send(JSON.stringify({e:'i', p:playerslist, i:client.playerIndex}));
 	var mapString = '';
