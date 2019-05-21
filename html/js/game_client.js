@@ -15,6 +15,7 @@ $(function(){
 	var sit = false;
 	var username;
 	var cmsg = $('#chat_message');
+	var emsg = $('#error_message');
 
 	$('#username_modal').modal({backdrop:'static', keyboard:false});
 
@@ -52,8 +53,15 @@ $(function(){
 		// Log connection
 		console.log('Connection open.\nLogin credentials sent.');
 		
-		// Send server username and erase client username history
+		// Send server username
 		socket.send('u' + username);
+		
+		// Create playername div and append to map
+/*		var player = $('#player' + playerIndex);
+		var playernameEl = $('<div class="playername-wrapper">').append('<span class="playername">').text(username);
+		playernameEl.appendTo(player);*/
+		
+		// Empty client username variable
 		username = '';
 		
 		// Check if device is mobile
@@ -88,6 +96,8 @@ $(function(){
 						if(element.length == 0){
 							element = $('<div class="sprite sprite-bandit" id="player' + player.i + '" style="width:' + player.pw + 'px; height:' + player.ph + 'px; position:absolute;"></div>');
 							element.appendTo($('#map'));
+							var playernameEl = $('<div class="playername-wrapper">').append($('<span class="playername">').text(player.un));
+							playernameEl.appendTo(element);
 						}
 						var props = {};
 						if('y' in player){
@@ -164,7 +174,10 @@ $(function(){
 				break;
 			case 'e':
 				// Error
-				$('#map').html('<div class="alert alert-primary" role="alert">' + data.m + '</div>');
+				$('<div class="alert alert-warning" role="alert">')
+					.append($('<span>').text(data.m))
+					.appendTo(emsg);
+				$('#error_modal').modal('show');
 				break;
 		}
 	}

@@ -217,6 +217,7 @@ function processPlayers(){
 				updatedPlayer.pw = players[i].pw;
 				updatedPlayer.ph = players[i].ph;
 				updatedPlayer.sit = players[i].sit;
+				updatedPlayer.un = players[i].name;
 			}
 		}
 		if(playerChanged) updatedPlayers.push(updatedPlayer);
@@ -247,7 +248,7 @@ function processPlayers(){
 function setupNewClient(client){
 	var playerslist = [];
 	for(var i = 0; i < players.length; i++){
-		if(players[i]) playerslist.push({i:i, x:players[i].x, y:players[i].y, w:players[i].w, t:players[i].t, cs:players[i].cs, pw:players[i].pw, ph:players[i].ph, sit:players[i].sit});
+		if(players[i]) playerslist.push({i:i, x:players[i].x, y:players[i].y, w:players[i].w, t:players[i].t, cs:players[i].cs, pw:players[i].pw, ph:players[i].ph, sit:players[i].sit, un:players[i].name});
 	}
 	client.send(JSON.stringify({e:'i', p:playerslist, i:client.playerIndex}));
 	var mapString = '';
@@ -271,31 +272,7 @@ console.log("Server started");
 var WebSocketServer = require('ws').Server
     , wss = new WebSocketServer({port: 8010});
 wss.on('connection', function(ws) {
-	for(var i = 0; i < players.length; i++){
-		if(!players[i]){
-			players[i] = {
-					client:ws,
-					x:(tileWidth*spawnPoint['x']), y:(tileHeight*spawnPoint['y']),
-					still:true,
-					sit:false, sitting:false,
-					pw:64, ph:64, // Player width and height in pixels
-					l:false, u:false, r:false, d:false,
-					w:0, t:0, // w is used for the walk animation and t is the rotation of the player.
-					cs:0, // cs is used to determine which sprite is being used for the player.
-					n:true, remove:false, // n signifies that the player is new
-					name:i // name is the player name
-				};
-			ws.playerIndex = i;
-			setupNewClient(players[i].client);
-			console.log('Player #' + i + ' has joined the server.');
-			i = 10;
-		}
-	}
-	if(!('playerIndex' in ws)){
-		ws.send(JSON.stringify({e:'e', m:'Sorry, The server is full.'}));
-		ws.close();
-	}
-	else ws.on('message', function(message) {
+	ws.on('message', function(message) {
 		console.log('Received from client: %s', message);
 		switch(message.charAt(0)){
 			case 'p':
@@ -347,8 +324,40 @@ wss.on('connection', function(ws) {
 					errMsg = 'You must enter a username and username must contain only alphanumeric characters.';
 				}
 				if(ok){
+					for(var i = 0; i < players.length; i++){
+						if(players[i] && (username == players[i].name)){
+							ok = false;
+							errMsg = 'Username is already in use.';
+							i = players.length;
+						}
+					}
+				}
+				if(ok){
 					console.log('Player #' + ws.playerIndex + ' has claimed the username ' + username);
-					players[ws.playerIndex].name = username;
+					for(var i = 0; i < players.length; i++){
+						if(!players[i]){
+							players[i] = {
+									client:ws,
+									x:(tileWidth*spawnPoint['x']), y:(tileHeight*spawnPoint['y']),
+									still:true,
+									sit:false, sitting:false,
+									pw:64, ph:64, // Player width and height in pixels
+									l:false, u:false, r:false, d:false,
+									w:0, t:0, // w is used for the walk animation and t is the rotation of the player.
+									cs:0, // cs is used to determine which sprite is being used for the player.
+									n:true, remove:false, // n signifies that the player is new
+									name:username // name is the player name
+								};
+							ws.playerIndex = i;
+							setupNewClient(players[i].client);
+							console.log('Player #' + i + ' has joined the server.');
+							i = players.length;
+						}
+					}
+					if(!('playerIndex' in ws)){
+						ws.send(JSON.stringify({e:'e', m:'Sorry, The server is full.'}));
+						ws.close();
+					}
 				}
 				else{
 					ws.send(JSON.stringify({e:'e', m:errMsg}));
