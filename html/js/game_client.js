@@ -109,7 +109,7 @@ $(function(){
 						if('t' in player) props['background-position-y'] = -(element.height()*2)*(player.t)+'px';
 						if('pw' in player) props['width'] = player.pw + 'px';
 						if('ph' in player) props['height'] = player.ph + 'px';
-						if('sit' in player){
+						if(('sit' in player) && (player.i == playerIndex)){
 							sit = player.sit;
 							var sitBtn = $('#mb-sit-toggle');
 							var sitBtnText = sitBtn.text();
